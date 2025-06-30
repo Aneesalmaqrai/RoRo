@@ -27,7 +27,7 @@
         }
 
         .code-scroller {
-            width: 80%;
+            width: 90%; /* زيادة العرض قليلاً */
             max-width: 700px;
             background-color: #1a1a1a;
             border: 1px solid #0F0;
@@ -43,11 +43,10 @@
             width: 100%;
             white-space: pre-wrap; /* للحفاظ على تنسيق الأكواد والأسطر الجديدة */
             text-align: left;
-            /* إعادة الحركة اللا نهائية */
             animation: scroll-down 15s linear infinite; /* حركة الأكواد */
             padding-right: 20px;
             box-sizing: border-box;
-            padding-bottom: 200px; /* مساحة إضافية في الأسفل لظهور الرسائل */
+            padding-bottom: 400px; /* زيادة مساحة التمرير بعد الرسائل لضمان ظهورها بالكامل */
         }
 
         .roro-highlight {
@@ -74,8 +73,10 @@
 
         .embedded-message.roro {
             color: #0F0; /* أخضر لـ RORO */
-            text-shadow: 0 0 12px #0F0;
-            font-size: 2em; /* أكبر قليلاً لاسم RORO */
+            font-size: 8em; /* **زيادة حجم RORO ليملأ الشاشة** */
+            text-shadow: 0 0 20px #0F0; /* توهج أكبر */
+            line-height: 1em; /* لتقليل المسافة بين الأسطر إذا كانت RORO في أكثر من سطر */
+            margin: 20px 0; /* مسافة أعلى وأسفل RORO */
         }
 
         /* حركة الأكواد من الأعلى للأسفل */
@@ -84,9 +85,23 @@
                 transform: translateY(-100%); /* تبدأ من أعلى الصندوق */
             }
             100% {
-                /* تنتهي عند أسفل الصندوق، تأكد أن المحتوى الإضافي سيظهر */
-                transform: translateY(calc(100% - 400px - 200px)); /* حساب لكي يمر كل المحتوى */
-                /* 400px هو ارتفاع الـ code-scroller, 200px هي الـ padding-bottom */
+                /*
+                الحساب: (ارتفاع المحتوى الكلي - ارتفاع الصندوق)
+                ارتفاع المحتوى الكلي = الارتفاع الأصلي للأكواد + محتوى RORO والرسائل + padding-bottom
+                بفرض أن ارتفاع الأكواد الأصلية يتجاوز 400px (ارتفاع الصندوق)، فإن translateY(100%) ستدفعه للأسفل.
+                لجعل "RORO" يظهر في نهاية الدورة ثم يختفي، نحتاج لدفع كل المحتوى لأسفل بحيث يمر
+                الـ "top" الخاص بالمحتوى من -100% إلى نقطة تجعل آخر سطر يختفي من الأسفل.
+                transform: translateY(القيمة القصوى التي تجعل كل المحتوى يمر)
+                إذا كان ارتفاع الـ .code-lines هو X، وارتفاع الـ .code-scroller هو Y
+                فالنهاية ستكون transform: translateY(X - Y);
+                مع الأخذ في الاعتبار أن 100% تعبر عن ارتفاع العنصر نفسه، فإن translateY(100%) تدفعه بمسافة تعادل ارتفاعه.
+                لجعل كل المحتوى يمر:
+                القيمة النهائية = (ارتفاع المحتوى الكلي - ارتفاع الشاشة الظاهر) / ارتفاع المحتوى الكلي * 100%
+                للسماح بالمرور بشكل سلس، يمكننا ببساطة زيادة قيمة 100% إلى قيمة أكبر تجعل العنصر يمر بالكامل.
+                أو جعل القيمة النهائية تدفع العنصر بحيث يصبح أسفل الصندوق تمامًا.
+                */
+                transform: translateY(calc(100% + 150px)); /* زيادة القيمة لتمرير RORO الكبير والرسائل */
+                /* 150px هو قيمة تقديرية إضافية لدفع المحتوى لأسفل أكثر بعد تجربة الأحجام الجديدة */
             }
         }
 
@@ -220,14 +235,12 @@
             echo "..."
             echo "..."
 
-            <br><br>
-            <span class="embedded-message success">تم اختراقك بنجاح</span>
+            <br><br><br><br><br><br><br><br><br><br> <span class="embedded-message success">تم اختراقك بنجاح</span>
             <br>
             <span class="embedded-message roro">RORO</span>
             <br>
             <span class="embedded-message success">تم اختراقك بنجاح</span>
-            <br><br><br><br> </pre>
+            <br><br><br><br><br><br><br><br><br><br> </pre>
     </div>
-
-    </body>
+</body>
 </html>
