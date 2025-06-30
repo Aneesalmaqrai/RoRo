@@ -43,12 +43,11 @@
             width: 100%;
             white-space: pre-wrap; /* للحفاظ على تنسيق الأكواد والأسطر الجديدة */
             text-align: left;
-            /* إعادة ضبط الحركة */
-            animation: scroll-down 18s linear infinite; /* حركة الأكواد: 18s مدة الدورة الواحدة */
+            animation: scroll-down 20s linear infinite; /* زيادة المدة قليلاً لتدفق أبطأ ومريح */
             padding-right: 20px;
             box-sizing: border-box;
-            /* مساحة سفلية كافية للمحتوى الإضافي ليظهر ويمر */
-            padding-bottom: 500px; /* زيادة لضمان رؤية RORO الكبير يمر بالكامل */
+            /* زيادة كبيرة في padding-bottom لاستيعاب المحتوى الكبير + مساحة مرور */
+            padding-bottom: 800px; /* يجب أن تكون كافية لجعل RORO الضخم يمر بالكامل */
         }
 
         .roro-highlight {
@@ -57,48 +56,64 @@
             text-shadow: 0 0 5px #FF0;
         }
 
-        .embedded-message {
-            font-size: 1.5em; /* أصغر قليلاً لتتناسب مع الأكواد */
+        /* تنسيقات الرسائل و RORO عندما تكون جزءًا من الأكواد */
+        .big-message {
             font-weight: bold;
             text-align: center;
             width: 100%;
             display: block; /* لجعلها تأخذ سطرًا كاملاً */
-            margin-top: 20px; /* مسافة قبل الظهور */
+            margin: 40px 0; /* مسافة أكبر أعلى وأسفل الرسائل الكبيرة */
+            word-break: break-all; /* لمنع تجاوز الكلمة الكبيرة للحدود */
         }
 
-        .embedded-message.success {
+        .big-message.success {
+            font-size: 2.5em; /* حجم أكبر لرسالة الاختراق */
             color: #F00; /* أحمر لرسالة الاختراق */
-            text-shadow: 0 0 8px #F00;
+            text-shadow: 0 0 10px #F00;
             animation: glitch 1s infinite alternate; /* تأثير اهتزاز/خلل */
         }
 
-        .embedded-message.roro {
+        .big-message.roro {
+            font-size: 12em; /* **حجم RORO الأقصى ليملأ الشاشة** */
             color: #0F0; /* أخضر لـ RORO */
-            font-size: 8em; /* **حجم RORO ليملأ الشاشة** */
-            text-shadow: 0 0 20px #0F0; /* توهج أكبر */
-            line-height: 1em; /* لتقليل المسافة بين الأسطر إذا كانت RORO في أكثر من سطر */
-            margin: 30px 0; /* مسافة أعلى وأسفل RORO */
-            word-break: break-all; /* لمنع تجاوز الكلمة الكبيرة للحدود */
+            text-shadow: 0 0 30px #0F0; /* توهج أكبر بكثير */
+            line-height: 0.8em; /* لتقليل المسافة بين الأسطر لـ RORO الكبير جدًا */
         }
 
         /* حركة الأكواد: تبدأ من الأعلى وتتحرك للأسفل */
         @keyframes scroll-down {
             0% {
-                /*
-                تبدأ من هنا: العنصر خارج الرؤية في الأعلى.
-                نبدأ من 0 (الموضع الطبيعي) ثم ندفعه لأعلى بمسافة تعادل ارتفاعه الكلي.
-                هذا يجعله يبدأ من خارج الصندوق المرئي في الأعلى.
-                ارتفاع .code-lines يتغير بناءً على المحتوى.
-                سندفع العنصر بالكامل خارج الشاشة من الأعلى.
-                */
-                transform: translateY(100%); /* يدفع العنصر بالكامل لأسفل بحيث نهايته تكون عند بداية الصندوق (فعليًا يبدأ من الأسفل) */
+                /* تبدأ من الأعلى (خارج الرؤية) */
+                /* translateY(-100%) تدفع العنصر لأعلى بمسافة تعادل ارتفاعه */
+                transform: translateY(-100%);
             }
             100% {
-                /*
-                تصل إلى هنا: العنصر خارج الرؤية في الأسفل.
-                ندفعه للأعلى بمسافة تعادل ارتفاعه الكلي، مما يجعله يختفي من الأعلى.
-                */
-                transform: translateY(-100%); /* يدفع العنصر بالكامل لأعلى بحيث بدايته تكون عند نهاية الصندوق (فعليًا يمر من الأعلى) */
+                /* تتحرك لأسفل لتخرج من أسفل الصندوق. */
+                /* القيمة (ارتفاع العنصر + ارتفاع الصندوق + padding-bottom) لضمان المرور الكامل */
+                /* تقديرًا، يمكننا استخدام قيمة كبيرة جداً لضمان تجاوز كل المحتوى */
+                transform: translateY(calc(100% + 500px)); /* دفعة قوية للأسفل */
+            }
+        }
+
+        /* تأثير Glitch */
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            100% {
+                transform: translate(0);
             }
         }
     </style>
@@ -141,4 +156,91 @@
             sleep 1
             echo "System integrity compromised. Mission complete."
             echo "Exiting all active sessions..."
-            sleep 0.
+            sleep 0.5
+            echo "Thank you for your cooperation. Goodbye."
+            echo ""
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <span class="big-message success">تم اختراقك بنجاح</span>
+            <br>
+            <span class="big-message roro">RORO</span>
+            <br>
+            <span class="big-message success">تم اختراقك بنجاح</span>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        </pre>
+    </div>
+</body>
+</html>
