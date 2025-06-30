@@ -1,83 +1,204 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Full-Screen Video</title>
+    <title>صفحة اختراق وهمية متقدمة</title>
     <style>
-        body, html {
+        body {
+            background-color: #000; /* خلفية سوداء */
+            color: #0F0; /* نص أخضر فاتح للهاكر */
+            font-family:  Courier New , Courier, monospace; /* خط يشبه شاشات الأكواد */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: black;
-            overflow: hidden;
+            overflow: hidden; /* لمنع ظهور scrollbars غير مرغوبة */
+            text-align: center;
+            padding-top: 20px; /* مسافة من الأعلى */
         }
-        #videoContainer {
+
+        .ghost-image {
+            width: 150px; /* حجم الشبح */
+            height: auto;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 10px #0F0); /* تأثير توهج أخضر حول الشبح */
+        }
+
+        .code-scroller {
+            width: 80%;
+            max-width: 700px;
+            background-color: #1a1a1a;
+            border: 1px solid #0F0;
+            padding: 20px;
+            box-shadow: 0 0 15px #0F0;
+            overflow: hidden; /* لإخفاء الأكواد التي تتحرك خارج الصندوق */
             position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            height: 400px; /* ارتفاع ثابت لعرض الأكواد المتحركة */
         }
-        video {
+
+        .code-lines {
+            position: absolute;
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: none; /* Hide video initially */
+            white-space: pre-wrap; /* للحفاظ على تنسيق الأكواد والأسطر الجديدة */
+            text-align: left;
+            animation: scroll-down 15s linear infinite; /* حركة الأكواد */
+            padding-right: 20px; /* لتجنب قص النص بسبب overflow hidden */
+            box-sizing: border-box; /* لضمان أن المساحة المتروكة لا تزيد عن عرض العنصر */
         }
-        #playButton {
+
+        .roro-highlight {
+            font-weight: bold;
+            color: #FF0; /* لون أصفر لتمييز roro */
+            text-shadow: 0 0 5px #FF0;
+        }
+
+        .success-message {
             font-size: 2em;
-            padding: 20px 40px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            z-index: 10;
+            color: #F00; /* لون أحمر للاختراق */
+            font-weight: bold;
+            text-shadow: 0 0 10px #F00;
+            animation: glitch 1s infinite alternate; /* تأثير اهتزاز/خلل */
+            margin-top: 30px; /* مسافة بعد الأكواد */
+        }
+
+        /* حركة الأكواد من الأعلى للأسفل */
+        @keyframes scroll-down {
+            0% {
+                transform: translateY(-100%); /* تبدأ من أعلى الصندوق */
+            }
+            100% {
+                transform: translateY(100%); /* تنتهي عند أسفل الصندوق */
+            }
+        }
+
+        /* تأثير Glitch */
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            100% {
+                transform: translate(0);
+            }
         }
     </style>
 </head>
 <body>
-    <div id="videoContainer">
-        <button id="playButton">Tap to Play Video</button>
-        <video id="myVideo" controls playsinline>
-            <source src="1751299708522.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
+    <img src="https://i.ibb.co/k27r0mH/ghost.png" alt="Ghost" class="ghost-image">
 
-    <script>
-        document.addEventListener( DOMContentLoaded , function() {
-            const playButton = document.getElementById( playButton );
-            const video = document.getElementById( myVideo );
-
-            playButton.addEventListener( click , function() {
-                playButton.style.display =  none ; // Hide the button
-                video.style.display =  block ;    // Show the video
-
-                video.play().then(() => {
-                    // Attempt full-screen after successful play
-                    if (video.requestFullscreen) {
-                        video.requestFullscreen().catch(err => {
-                            console.log("Fullscreen request denied or not supported:", err);
-                        });
-                    } else if (video.webkitRequestFullscreen) { /* Safari */
-                        video.webkitRequestFullscreen();
-                    } else if (video.msRequestFullscreen) { /* IE11 */
-                        video.msRequestFullscreen();
-                    }
-                }).catch(error => {
-                    console.error("Video play failed:", error);
-                    // If play fails, maybe show the button again or an error message
-                    playButton.style.display =  block ;
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+    <div class="code-scroller">
+        <pre class="code-lines">
+            #!/bin/bash
+            # Initializing secure shell protocol...
+            echo "Establishing encrypted connection..."
+            sleep 0.5
+            echo "Accessing remote server: [192.168.1.1]"
+            sleep 0.7
+            echo "Attempting to gain root privileges..."
+            sleep 1
+            echo "Permission denied. Retrying with escalated privileges."
+            sleep 1.2
+            echo "Bypassing security protocols. STATUS: Success!"
+            sleep 0.8
+            echo "Enumerating network devices..."
+            sleep 0.6
+            echo "Found target system: [DATABASE_SERVER]"
+            sleep 0.9
+            echo "Injecting SQL payload into login forms..."
+            sleep 1.1
+            echo "Extracting user hashes..."
+            sleep 0.4
+            echo "Cracking passwords using brute-force algorithm..."
+            sleep 1.5
+            echo "Decryption successful for multiple accounts."
+            echo "The operation was orchestrated by: &lt;span class= roro-highlight &gt;RORO&lt;/span&gt;"
+            sleep 1
+            echo "Uploading backdoor shell to compromised server..."
+            sleep 0.7
+            echo "Establishing persistent connection..."
+            sleep 0.9
+            echo "Covering tracks: Deleting log files and system traces."
+            sleep 1
+            echo "System integrity compromised. Mission complete."
+            echo "Exiting all active sessions..."
+            sleep 0.5
+            echo "Thank you for your cooperation. Goodbye."
+            echo ""
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
+            echo "..."
