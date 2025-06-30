@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Full-Screen Video</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            overflow: hidden;
+        }
+        #videoContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none; /* Hide video initially */
+        }
+        #playButton {
+            font-size: 2em;
+            padding: 20px 40px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div id="videoContainer">
+        <button id="playButton">Tap to Play Video</button>
+        <video id="myVideo" controls playsinline>
+            <source src="my_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <script>
+        document.addEventListener( DOMContentLoaded , function() {
+            const playButton = document.getElementById( playButton );
+            const video = document.getElementById( myVideo );
+
+            playButton.addEventListener( click , function() {
+                playButton.style.display =  none ; // Hide the button
+                video.style.display =  block ;    // Show the video
+
+                video.play().then(() => {
+                    // Attempt full-screen after successful play
+                    if (video.requestFullscreen) {
+                        video.requestFullscreen().catch(err => {
+                            console.log("Fullscreen request denied or not supported:", err);
+                        });
+                    } else if (video.webkitRequestFullscreen) { /* Safari */
+                        video.webkitRequestFullscreen();
+                    } else if (video.msRequestFullscreen) { /* IE11 */
+                        video.msRequestFullscreen();
+                    }
+                }).catch(error => {
+                    console.error("Video play failed:", error);
+                    // If play fails, maybe show the button again or an error message
+                    playButton.style.display =  block ;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
