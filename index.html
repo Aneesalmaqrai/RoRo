@@ -36,7 +36,9 @@
             overflow: hidden;
             position: relative;
             height: 400px;
-            /* ستتحكم JavaScript في إخفائها لاحقًا */
+            opacity: 1; /* مرئي في البداية */
+            /* تقليل مدة التلاشي */
+            transition: opacity 0.8s ease-out; /* انتقال سلس عند الاختفاء */
         }
 
         .code-lines {
@@ -44,7 +46,8 @@
             width: 100%;
             white-space: pre-wrap;
             text-align: left;
-            animation: scroll-down 15s linear forwards; /* حركة لمرة واحدة */
+            /* تقليل مدة الحركة */
+            animation: scroll-down 8s linear forwards; /* حركة لمرة واحدة أسرع */
             padding-right: 20px;
             box-sizing: border-box;
         }
@@ -55,17 +58,16 @@
             text-shadow: 0 0 5px #FF0;
         }
 
-        /* إخفاء هذه العناصر في البداية بواسطة CSS */
-        .hidden {
+        .hidden-element {
             display: none;
             opacity: 0;
         }
 
-        /* فئة لإظهار العناصر لاحقًا بواسطة JavaScript */
         .show-element {
-            display: block; /* أو flex حسب الحاجة */
+            display: block;
             opacity: 1;
-            transition: opacity 1s ease-in; /* انتقال سلس عند الظهور */
+            /* تقليل مدة الظهور */
+            transition: opacity 0.8s ease-in; /* انتقال سلس عند الظهور */
         }
 
         .success-message {
@@ -235,56 +237,61 @@
         </pre>
     </div>
 
-    <div class="success-message top hidden" id="topSuccessMessage">
+    <div class="success-message top hidden-element" id="topSuccessMessage">
         تم اختراقك بنجاح
     </div>
 
-    <div class="center-roro hidden" id="centerRoro">
+    <div class="center-roro hidden-element" id="centerRoro">
         RORO
     </div>
 
-    <div class="success-message hidden" id="bottomSuccessMessage">
+    <div class="success-message hidden-element" id="bottomSuccessMessage">
         تم اختراقك بنجاح
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
+        function initializePage() {
             const codeScroller = document.getElementById('codeScroller');
             const codeLines = document.getElementById('codeLines');
             const topSuccessMessage = document.getElementById('topSuccessMessage');
             const centerRoro = document.getElementById('centerRoro');
             const bottomSuccessMessage = document.getElementById('bottomSuccessMessage');
 
-            // 1. اضف class 'hidden' لجميع العناصر التي يجب ان تظهر لاحقا عند تحميل الصفحة
-            // (هذا تم بالفعل في HTML، ولكن للتأكيد في حال تم حذفها يدويًا)
-            topSuccessMessage.classList.add('hidden');
-            centerRoro.classList.add('hidden');
-            bottomSuccessMessage.classList.add('hidden');
+            // تأكد من إخفاء العناصر في البداية
+            topSuccessMessage.classList.add('hidden-element');
+            centerRoro.classList.add('hidden-element');
+            bottomSuccessMessage.classList.add('hidden-element');
 
-            // 2. استمع لحدث انتهاء حركة الأكواد
-            codeLines.addEventListener('animationend', () => {
-                // 3. عند انتهاء الحركة، اخفِ الـ codeScroller
-                codeScroller.style.opacity = '0'; // ابدأ تلاشي الشفافية
-                
-                // 4. بعد فترة كافية لتلاشي الشفافية (مدة الانتقال CSS)، اخفِ العنصر بالكامل
-                // ثم اظهر العناصر الأخرى
+            // ضبط التوقيتات (بالمللي ثانية) لتكون أسرع
+            const animationDuration = 8000; // 8 ثوانٍ لحركة الأكواد (من CSS)
+            const fadeOutDuration = 800; // 0.8 ثانية لتلاشي صندوق الأكواد (من CSS)
+            const delayBeforeShowingMessages = 200; // 0.2 ثانية تأخير قبل ظهور الرسائل بعد تلاشي الشاشة
+
+            // تشغيل مؤقت رئيسي يطابق نهاية حركة الأكواد
+            setTimeout(() => {
+                // المرحلة 1: بدء تلاشي صندوق الأكواد
+                codeScroller.style.opacity = '0';
+
+                // المرحلة 2: بعد انتهاء تلاشي الأكواد، إخفاء الصندوق بالكامل
+                // ثم إظهار الرسائل و RORO
                 setTimeout(() => {
-                    codeScroller.style.display = 'none'; // اخفِ الصندوق تماما
+                    codeScroller.style.display = 'none'; // إخفاء الصندوق تمامًا
 
-                    // 5. اظهر العناصر المطلوبة باضافة فئة 'show-element'
-                    // هذا سيجعلها تظهر وتتلاشى تدريجياً بفضل الـ transition
-                    topSuccessMessage.classList.remove('hidden');
+                    // إزالة فئة الإخفاء وإضافة فئة الظهور تدريجياً
+                    topSuccessMessage.classList.remove('hidden-element');
                     topSuccessMessage.classList.add('show-element');
 
-                    centerRoro.classList.remove('hidden');
+                    centerRoro.classList.remove('hidden-element');
                     centerRoro.classList.add('show-element');
 
-                    bottomSuccessMessage.classList.remove('hidden');
+                    bottomSuccessMessage.classList.remove('hidden-element');
                     bottomSuccessMessage.classList.add('show-element');
 
-                }, 1000); // 1000ms = 1 ثانية، تتطابق مع مدة transition في CSS لـ opacity
-            });
-        });
+                }, fadeOutDuration); // انتظر مدة التلاشي
+            }, animationDuration + delayBeforeShowingMessages); // انتظر حتى تنتهي حركة الأكواد + تأخير بسيط
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </body>
 </html>
