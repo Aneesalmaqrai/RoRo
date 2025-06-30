@@ -43,10 +43,12 @@
             width: 100%;
             white-space: pre-wrap; /* للحفاظ على تنسيق الأكواد والأسطر الجديدة */
             text-align: left;
-            animation: scroll-down 15s linear infinite; /* حركة الأكواد */
+            /* إعادة ضبط الحركة */
+            animation: scroll-down 18s linear infinite; /* حركة الأكواد: 18s مدة الدورة الواحدة */
             padding-right: 20px;
             box-sizing: border-box;
-            padding-bottom: 400px; /* زيادة مساحة التمرير بعد الرسائل لضمان ظهورها بالكامل */
+            /* مساحة سفلية كافية للمحتوى الإضافي ليظهر ويمر */
+            padding-bottom: 500px; /* زيادة لضمان رؤية RORO الكبير يمر بالكامل */
         }
 
         .roro-highlight {
@@ -55,7 +57,6 @@
             text-shadow: 0 0 5px #FF0;
         }
 
-        /* تنسيقات الرسائل و RORO عندما تكون جزءًا من الأكواد */
         .embedded-message {
             font-size: 1.5em; /* أصغر قليلاً لتتناسب مع الأكواد */
             font-weight: bold;
@@ -73,57 +74,31 @@
 
         .embedded-message.roro {
             color: #0F0; /* أخضر لـ RORO */
-            font-size: 8em; /* **زيادة حجم RORO ليملأ الشاشة** */
+            font-size: 8em; /* **حجم RORO ليملأ الشاشة** */
             text-shadow: 0 0 20px #0F0; /* توهج أكبر */
             line-height: 1em; /* لتقليل المسافة بين الأسطر إذا كانت RORO في أكثر من سطر */
-            margin: 20px 0; /* مسافة أعلى وأسفل RORO */
+            margin: 30px 0; /* مسافة أعلى وأسفل RORO */
+            word-break: break-all; /* لمنع تجاوز الكلمة الكبيرة للحدود */
         }
 
-        /* حركة الأكواد من الأعلى للأسفل */
+        /* حركة الأكواد: تبدأ من الأعلى وتتحرك للأسفل */
         @keyframes scroll-down {
             0% {
-                transform: translateY(-100%); /* تبدأ من أعلى الصندوق */
+                /*
+                تبدأ من هنا: العنصر خارج الرؤية في الأعلى.
+                نبدأ من 0 (الموضع الطبيعي) ثم ندفعه لأعلى بمسافة تعادل ارتفاعه الكلي.
+                هذا يجعله يبدأ من خارج الصندوق المرئي في الأعلى.
+                ارتفاع .code-lines يتغير بناءً على المحتوى.
+                سندفع العنصر بالكامل خارج الشاشة من الأعلى.
+                */
+                transform: translateY(100%); /* يدفع العنصر بالكامل لأسفل بحيث نهايته تكون عند بداية الصندوق (فعليًا يبدأ من الأسفل) */
             }
             100% {
                 /*
-                الحساب: (ارتفاع المحتوى الكلي - ارتفاع الصندوق)
-                ارتفاع المحتوى الكلي = الارتفاع الأصلي للأكواد + محتوى RORO والرسائل + padding-bottom
-                بفرض أن ارتفاع الأكواد الأصلية يتجاوز 400px (ارتفاع الصندوق)، فإن translateY(100%) ستدفعه للأسفل.
-                لجعل "RORO" يظهر في نهاية الدورة ثم يختفي، نحتاج لدفع كل المحتوى لأسفل بحيث يمر
-                الـ "top" الخاص بالمحتوى من -100% إلى نقطة تجعل آخر سطر يختفي من الأسفل.
-                transform: translateY(القيمة القصوى التي تجعل كل المحتوى يمر)
-                إذا كان ارتفاع الـ .code-lines هو X، وارتفاع الـ .code-scroller هو Y
-                فالنهاية ستكون transform: translateY(X - Y);
-                مع الأخذ في الاعتبار أن 100% تعبر عن ارتفاع العنصر نفسه، فإن translateY(100%) تدفعه بمسافة تعادل ارتفاعه.
-                لجعل كل المحتوى يمر:
-                القيمة النهائية = (ارتفاع المحتوى الكلي - ارتفاع الشاشة الظاهر) / ارتفاع المحتوى الكلي * 100%
-                للسماح بالمرور بشكل سلس، يمكننا ببساطة زيادة قيمة 100% إلى قيمة أكبر تجعل العنصر يمر بالكامل.
-                أو جعل القيمة النهائية تدفع العنصر بحيث يصبح أسفل الصندوق تمامًا.
+                تصل إلى هنا: العنصر خارج الرؤية في الأسفل.
+                ندفعه للأعلى بمسافة تعادل ارتفاعه الكلي، مما يجعله يختفي من الأعلى.
                 */
-                transform: translateY(calc(100% + 150px)); /* زيادة القيمة لتمرير RORO الكبير والرسائل */
-                /* 150px هو قيمة تقديرية إضافية لدفع المحتوى لأسفل أكثر بعد تجربة الأحجام الجديدة */
-            }
-        }
-
-        /* تأثير Glitch */
-        @keyframes glitch {
-            0% {
-                transform: translate(0);
-            }
-            20% {
-                transform: translate(-2px, 2px);
-            }
-            40% {
-                transform: translate(-2px, -2px);
-            }
-            60% {
-                transform: translate(2px, 2px);
-            }
-            80% {
-                transform: translate(2px, -2px);
-            }
-            100% {
-                transform: translate(0);
+                transform: translateY(-100%); /* يدفع العنصر بالكامل لأعلى بحيث بدايته تكون عند نهاية الصندوق (فعليًا يمر من الأعلى) */
             }
         }
     </style>
@@ -166,81 +141,4 @@
             sleep 1
             echo "System integrity compromised. Mission complete."
             echo "Exiting all active sessions..."
-            sleep 0.5
-            echo "Thank you for your cooperation. Goodbye."
-            echo ""
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-            echo "..."
-
-            <br><br><br><br><br><br><br><br><br><br> <span class="embedded-message success">تم اختراقك بنجاح</span>
-            <br>
-            <span class="embedded-message roro">RORO</span>
-            <br>
-            <span class="embedded-message success">تم اختراقك بنجاح</span>
-            <br><br><br><br><br><br><br><br><br><br> </pre>
-    </div>
-</body>
-</html>
+            sleep 0.
