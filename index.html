@@ -35,73 +35,58 @@
             box-shadow: 0 0 15px #0F0;
             overflow: hidden;
             position: relative;
-            height: 400px;
-            opacity: 1; /* مرئي في البداية */
-            /* تقليل مدة التلاشي */
-            transition: opacity 0.8s ease-out; /* انتقال سلس عند الاختفاء */
+            height: 400px; /* ارتفاع ثابت لعرض الأكواد المتحركة */
         }
 
         .code-lines {
             position: absolute;
             width: 100%;
-            white-space: pre-wrap;
+            white-space: pre-wrap; /* للحفاظ على تنسيق الأكواد والأسطر الجديدة */
             text-align: left;
-            /* تقليل مدة الحركة */
-            animation: scroll-down 8s linear forwards; /* حركة لمرة واحدة أسرع */
+            /* إعادة الحركة اللا نهائية */
+            animation: scroll-down 15s linear infinite; /* حركة الأكواد */
             padding-right: 20px;
             box-sizing: border-box;
+            padding-bottom: 200px; /* مساحة إضافية في الأسفل لظهور الرسائل */
         }
 
         .roro-highlight {
             font-weight: bold;
-            color: #FF0;
+            color: #FF0; /* لون أصفر لتمييز roro */
             text-shadow: 0 0 5px #FF0;
         }
 
-        .hidden-element {
-            display: none;
-            opacity: 0;
-        }
-
-        .show-element {
-            display: block;
-            opacity: 1;
-            /* تقليل مدة الظهور */
-            transition: opacity 0.8s ease-in; /* انتقال سلس عند الظهور */
-        }
-
-        .success-message {
-            font-size: 2em;
-            color: #F00;
+        /* تنسيقات الرسائل و RORO عندما تكون جزءًا من الأكواد */
+        .embedded-message {
+            font-size: 1.5em; /* أصغر قليلاً لتتناسب مع الأكواد */
             font-weight: bold;
-            text-shadow: 0 0 10px #F00;
-            animation: glitch 1s infinite alternate;
-            margin-top: 30px;
-        }
-
-        .success-message.top {
-            margin-bottom: 20px;
-        }
-
-        .center-roro {
-            font-size: 4em;
-            font-weight: bold;
-            color: #0F0;
-            text-shadow: 0 0 15px #0F0;
-            margin-top: 20px;
             text-align: center;
             width: 100%;
-            box-sizing: border-box;
-            filter: drop-shadow(0 0 8px #0F0);
+            display: block; /* لجعلها تأخذ سطرًا كاملاً */
+            margin-top: 20px; /* مسافة قبل الظهور */
+        }
+
+        .embedded-message.success {
+            color: #F00; /* أحمر لرسالة الاختراق */
+            text-shadow: 0 0 8px #F00;
+            animation: glitch 1s infinite alternate; /* تأثير اهتزاز/خلل */
+        }
+
+        .embedded-message.roro {
+            color: #0F0; /* أخضر لـ RORO */
+            text-shadow: 0 0 12px #0F0;
+            font-size: 2em; /* أكبر قليلاً لاسم RORO */
         }
 
         /* حركة الأكواد من الأعلى للأسفل */
         @keyframes scroll-down {
             0% {
-                transform: translateY(-100%);
+                transform: translateY(-100%); /* تبدأ من أعلى الصندوق */
             }
             100% {
-                transform: translateY(100%);
+                /* تنتهي عند أسفل الصندوق، تأكد أن المحتوى الإضافي سيظهر */
+                transform: translateY(calc(100% - 400px - 200px)); /* حساب لكي يمر كل المحتوى */
+                /* 400px هو ارتفاع الـ code-scroller, 200px هي الـ padding-bottom */
             }
         }
 
@@ -131,8 +116,8 @@
 <body>
     <img src="IMG_20250630_234505_545.jpg" alt="Ghost" class="ghost-image">
 
-    <div class="code-scroller" id="codeScroller">
-        <pre class="code-lines" id="codeLines">
+    <div class="code-scroller">
+        <pre class="code-lines">
             #!/bin/bash
             # Initializing secure shell protocol...
             echo "Establishing encrypted connection..."
@@ -234,64 +219,15 @@
             echo "..."
             echo "..."
             echo "..."
-        </pre>
+
+            <br><br>
+            <span class="embedded-message success">تم اختراقك بنجاح</span>
+            <br>
+            <span class="embedded-message roro">RORO</span>
+            <br>
+            <span class="embedded-message success">تم اختراقك بنجاح</span>
+            <br><br><br><br> </pre>
     </div>
 
-    <div class="success-message top hidden-element" id="topSuccessMessage">
-        تم اختراقك بنجاح
-    </div>
-
-    <div class="center-roro hidden-element" id="centerRoro">
-        RORO
-    </div>
-
-    <div class="success-message hidden-element" id="bottomSuccessMessage">
-        تم اختراقك بنجاح
-    </div>
-
-    <script>
-        function initializePage() {
-            const codeScroller = document.getElementById('codeScroller');
-            const codeLines = document.getElementById('codeLines');
-            const topSuccessMessage = document.getElementById('topSuccessMessage');
-            const centerRoro = document.getElementById('centerRoro');
-            const bottomSuccessMessage = document.getElementById('bottomSuccessMessage');
-
-            // تأكد من إخفاء العناصر في البداية
-            topSuccessMessage.classList.add('hidden-element');
-            centerRoro.classList.add('hidden-element');
-            bottomSuccessMessage.classList.add('hidden-element');
-
-            // ضبط التوقيتات (بالمللي ثانية) لتكون أسرع
-            const animationDuration = 8000; // 8 ثوانٍ لحركة الأكواد (من CSS)
-            const fadeOutDuration = 800; // 0.8 ثانية لتلاشي صندوق الأكواد (من CSS)
-            const delayBeforeShowingMessages = 200; // 0.2 ثانية تأخير قبل ظهور الرسائل بعد تلاشي الشاشة
-
-            // تشغيل مؤقت رئيسي يطابق نهاية حركة الأكواد
-            setTimeout(() => {
-                // المرحلة 1: بدء تلاشي صندوق الأكواد
-                codeScroller.style.opacity = '0';
-
-                // المرحلة 2: بعد انتهاء تلاشي الأكواد، إخفاء الصندوق بالكامل
-                // ثم إظهار الرسائل و RORO
-                setTimeout(() => {
-                    codeScroller.style.display = 'none'; // إخفاء الصندوق تمامًا
-
-                    // إزالة فئة الإخفاء وإضافة فئة الظهور تدريجياً
-                    topSuccessMessage.classList.remove('hidden-element');
-                    topSuccessMessage.classList.add('show-element');
-
-                    centerRoro.classList.remove('hidden-element');
-                    centerRoro.classList.add('show-element');
-
-                    bottomSuccessMessage.classList.remove('hidden-element');
-                    bottomSuccessMessage.classList.add('show-element');
-
-                }, fadeOutDuration); // انتظر مدة التلاشي
-            }, animationDuration + delayBeforeShowingMessages); // انتظر حتى تنتهي حركة الأكواد + تأخير بسيط
-        }
-
-        document.addEventListener('DOMContentLoaded', initializePage);
-    </script>
-</body>
+    </body>
 </html>
