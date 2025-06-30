@@ -8,7 +8,7 @@
         body {
             background-color: #000; /* خلفية سوداء */
             color: #0F0; /* نص أخضر فاتح للهاكر */
-            font-family: 'Courier New', Courier, monospace; /* خط يشبه شاشات الأكواد */
+            font-family:  Courier New , Courier, monospace; /* خط يشبه شاشات الأكواد */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -27,13 +27,13 @@
         }
 
         .code-scroller {
-            width: 90%; /* زيادة العرض قليلاً */
+            width: 80%;
             max-width: 700px;
             background-color: #1a1a1a;
             border: 1px solid #0F0;
             padding: 20px;
             box-shadow: 0 0 15px #0F0;
-            overflow: hidden;
+            overflow: hidden; /* لإخفاء الأكواد التي تتحرك خارج الصندوق */
             position: relative;
             height: 400px; /* ارتفاع ثابت لعرض الأكواد المتحركة */
         }
@@ -43,11 +43,9 @@
             width: 100%;
             white-space: pre-wrap; /* للحفاظ على تنسيق الأكواد والأسطر الجديدة */
             text-align: left;
-            animation: scroll-down 20s linear infinite; /* زيادة المدة قليلاً لتدفق أبطأ ومريح */
-            padding-right: 20px;
-            box-sizing: border-box;
-            /* زيادة كبيرة في padding-bottom لاستيعاب المحتوى الكبير + مساحة مرور */
-            padding-bottom: 800px; /* يجب أن تكون كافية لجعل RORO الضخم يمر بالكامل */
+            animation: scroll-down 15s linear infinite; /* حركة الأكواد */
+            padding-right: 20px; /* لتجنب قص النص بسبب overflow hidden */
+            box-sizing: border-box; /* لضمان أن المساحة المتروكة لا تزيد عن عرض العنصر */
         }
 
         .roro-highlight {
@@ -56,42 +54,22 @@
             text-shadow: 0 0 5px #FF0;
         }
 
-        /* تنسيقات الرسائل و RORO عندما تكون جزءًا من الأكواد */
-        .big-message {
+        .success-message {
+            font-size: 2em;
+            color: #F00; /* لون أحمر للاختراق */
             font-weight: bold;
-            text-align: center;
-            width: 100%;
-            display: block; /* لجعلها تأخذ سطرًا كاملاً */
-            margin: 40px 0; /* مسافة أكبر أعلى وأسفل الرسائل الكبيرة */
-            word-break: break-all; /* لمنع تجاوز الكلمة الكبيرة للحدود */
-        }
-
-        .big-message.success {
-            font-size: 2.5em; /* حجم أكبر لرسالة الاختراق */
-            color: #F00; /* أحمر لرسالة الاختراق */
             text-shadow: 0 0 10px #F00;
             animation: glitch 1s infinite alternate; /* تأثير اهتزاز/خلل */
+            margin-top: 30px; /* مسافة بعد الأكواد */
         }
 
-        .big-message.roro {
-            font-size: 12em; /* **حجم RORO الأقصى ليملأ الشاشة** */
-            color: #0F0; /* أخضر لـ RORO */
-            text-shadow: 0 0 30px #0F0; /* توهج أكبر بكثير */
-            line-height: 0.8em; /* لتقليل المسافة بين الأسطر لـ RORO الكبير جدًا */
-        }
-
-        /* حركة الأكواد: تبدأ من الأعلى وتتحرك للأسفل */
+        /* حركة الأكواد من الأعلى للأسفل */
         @keyframes scroll-down {
             0% {
-                /* تبدأ من الأعلى (خارج الرؤية) */
-                /* translateY(-100%) تدفع العنصر لأعلى بمسافة تعادل ارتفاعه */
-                transform: translateY(-100%);
+                transform: translateY(-100%); /* تبدأ من أعلى الصندوق */
             }
             100% {
-                /* تتحرك لأسفل لتخرج من أسفل الصندوق. */
-                /* القيمة (ارتفاع العنصر + ارتفاع الصندوق + padding-bottom) لضمان المرور الكامل */
-                /* تقديرًا، يمكننا استخدام قيمة كبيرة جداً لضمان تجاوز كل المحتوى */
-                transform: translateY(calc(100% + 500px)); /* دفعة قوية للأسفل */
+                transform: translateY(100%); /* تنتهي عند أسفل الصندوق */
             }
         }
 
@@ -224,23 +202,11 @@
             echo "..."
             echo "..."
             echo "..."
-
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-            <span class="big-message success">تم اختراقك بنجاح</span>
-            <br>
-            <span class="big-message roro">RORO</span>
-            <br>
-            <span class="big-message success">تم اختراقك بنجاح</span>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
         </pre>
+    </div>
+
+    <div class="success-message">
+        تم اختراقك بنجاح
     </div>
 </body>
 </html>
