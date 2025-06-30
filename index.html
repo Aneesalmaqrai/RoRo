@@ -8,7 +8,7 @@
         body {
             background-color: #000; /* خلفية سوداء */
             color: #0F0; /* نص أخضر فاتح للهاكر */
-            font-family:  Courier New , Courier, monospace; /* خط يشبه شاشات الأكواد */
+            font-family: 'Courier New', Courier, monospace; /* خط يشبه شاشات الأكواد */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -63,7 +63,7 @@
         }
 
         .success-message.show, .center-roro.show {
-            display: block; /* يظهر عندما يتم إضافة فئة  show  */
+            display: block; /* يظهر عندما يتم إضافة فئة 'show' */
             opacity: 1; /* مرئي */
         }
 
@@ -247,31 +247,31 @@
     </div>
 
     <script>
-        document.addEventListener( DOMContentLoaded , (event) => {
-            const codeScroller = document.getElementById( codeScroller );
-            const codeLines = document.getElementById( codeLines );
-            const topSuccessMessage = document.getElementById( topSuccessMessage );
-            const centerRoro = document.getElementById( centerRoro );
-            const bottomSuccessMessage = document.getElementById( bottomSuccessMessage );
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const codeScroller = document.getElementById('codeScroller');
+            const codeLines = document.getElementById('codeLines');
+            const topSuccessMessage = document.getElementById('topSuccessMessage');
+            const centerRoro = document.getElementById('centerRoro');
+            const bottomSuccessMessage = document.getElementById('bottomSuccessMessage');
 
             // إخفاء الرسائل و RORO في البداية
-            topSuccessMessage.classList.remove( show );
-            centerRoro.classList.remove( show );
-            bottomSuccessMessage.classList.remove( show );
+            topSuccessMessage.classList.remove('show');
+            centerRoro.classList.remove('show');
+            bottomSuccessMessage.classList.remove('show');
 
             // استمع لانتهاء حركة الأكواد
-            codeLines.addEventListener( animationend , () => {
+            codeLines.addEventListener('animationend', () => {
                 // إخفاء صندوق الأكواد
-                codeScroller.style.opacity =  0 ;
+                codeScroller.style.opacity = '0';
                 setTimeout(() => {
-                    codeScroller.style.display =  none ; // إخفاء الصندوق بالكامل بعد تلاشي الشفافية
+                    codeScroller.style.display = 'none'; // إخفاء الصندوق بالكامل بعد تلاشي الشفافية
                 }, 1000); // يتطابق مع مدة الانتقال (transition) للشفافية
 
                 // بعد تأخير بسيط لإظهار الانتقال للشاشة السوداء، أظهر العناصر الأخرى
                 setTimeout(() => {
-                    topSuccessMessage.classList.add( show );
-                    centerRoro.classList.add( show );
-                    bottomSuccessMessage.classList.add( show );
+                    topSuccessMessage.classList.add('show');
+                    centerRoro.classList.add('show');
+                    bottomSuccessMessage.classList.add('show');
                 }, 1500); // تأخير بعد اختفاء الأكواد
             });
         });
