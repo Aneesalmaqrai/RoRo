@@ -33,9 +33,9 @@
             border: 1px solid #0F0;
             padding: 20px;
             box-shadow: 0 0 15px #0F0;
-            overflow: hidden; /* لإخفاء الأكواد التي تتحرك خارج الصندوق */
+            overflow: hidden;
             position: relative;
-            height: 400px; /* ارتفاع ثابت لعرض الأكواد المتحركة */
+            height: 400px;
             opacity: 1; /* مرئي في البداية */
             transition: opacity 1s ease-out; /* انتقال سلس عند الاختفاء */
         }
@@ -43,62 +43,65 @@
         .code-lines {
             position: absolute;
             width: 100%;
-            white-space: pre-wrap; /* للحفاظ على تنسيق الأكواد والأسطر الجديدة */
+            white-space: pre-wrap;
             text-align: left;
-            animation: scroll-down 15s linear forwards; /* حركة الأكواد لمرة واحدة */
-            padding-right: 20px; /* لتجنب قص النص بسبب overflow hidden */
-            box-sizing: border-box; /* لضمان أن المساحة المتروكة لا تزيد عن عرض العنصر */
+            /* التعديل هنا: استخدام forwards لضمان بقاء الحركة في النهاية */
+            animation: scroll-down 15s linear forwards;
+            padding-right: 20px;
+            box-sizing: border-box;
         }
 
         .roro-highlight {
             font-weight: bold;
-            color: #FF0; /* لون أصفر لتمييز roro */
+            color: #FF0;
             text-shadow: 0 0 5px #FF0;
         }
 
+        /* جعل هذه العناصر مخفية تمامًا في البداية */
         .success-message, .center-roro {
-            display: none; /* مخفي في البداية */
-            opacity: 0; /* مخفي في البداية */
-            transition: opacity 1s ease-in; /* انتقال سلس عند الظهور */
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in;
         }
 
-        .success-message.show, .center-roro.show {
-            display: block; /* يظهر عندما يتم إضافة فئة 'show' */
-            opacity: 1; /* مرئي */
+        /* فئة لإظهار العناصر عند الحاجة */
+        .show {
+            display: block; /* تجعل العنصر مرئياً */
+            opacity: 1; /* تجعل العنصر يظهر تدريجياً */
         }
 
         .success-message {
             font-size: 2em;
-            color: #F00; /* لون أحمر للاختراق */
+            color: #F00;
             font-weight: bold;
             text-shadow: 0 0 10px #F00;
-            animation: glitch 1s infinite alternate; /* تأثير اهتزاز/خلل */
-            margin-top: 30px; /* مسافة بعد الأكواد */
+            animation: glitch 1s infinite alternate;
+            margin-top: 30px;
         }
 
         .success-message.top {
-            margin-bottom: 20px; /* مسافة تحت الرسالة */
+            margin-bottom: 20px;
         }
 
         .center-roro {
-            font-size: 4em; /* Make it large */
+            font-size: 4em;
             font-weight: bold;
-            color: #0F0; /* Green like the terminal */
-            text-shadow: 0 0 15px #0F0; /* Glow effect */
-            margin-top: 20px; /* مسافة بعد رسالة الاختراق العلوية */
-            text-align: center; /* Center the text */
-            width: 100%; /* Ensure it takes full width for centering */
+            color: #0F0;
+            text-shadow: 0 0 15px #0F0;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
             box-sizing: border-box;
-            filter: drop-shadow(0 0 8px #0F0); /* A subtle overall glow */
+            filter: drop-shadow(0 0 8px #0F0);
         }
 
         /* حركة الأكواد من الأعلى للأسفل */
         @keyframes scroll-down {
             0% {
-                transform: translateY(-100%); /* تبدأ من أعلى الصندوق */
+                transform: translateY(-100%);
             }
             100% {
-                transform: translateY(100%); /* تنتهي عند أسفل الصندوق */
+                transform: translateY(100%);
             }
         }
 
@@ -254,25 +257,32 @@
             const centerRoro = document.getElementById('centerRoro');
             const bottomSuccessMessage = document.getElementById('bottomSuccessMessage');
 
-            // إخفاء الرسائل و RORO في البداية
-            topSuccessMessage.classList.remove('show');
-            centerRoro.classList.remove('show');
-            bottomSuccessMessage.classList.remove('show');
+            // تأكد من أن جميع العناصر مخفية في البداية
+            topSuccessMessage.style.display = 'none';
+            centerRoro.style.display = 'none';
+            bottomSuccessMessage.style.display = 'none';
 
             // استمع لانتهاء حركة الأكواد
             codeLines.addEventListener('animationend', () => {
-                // إخفاء صندوق الأكواد
-                codeScroller.style.opacity = '0';
-                setTimeout(() => {
-                    codeScroller.style.display = 'none'; // إخفاء الصندوق بالكامل بعد تلاشي الشفافية
-                }, 1000); // يتطابق مع مدة الانتقال (transition) للشفافية
+                // عندما تنتهي حركة الأكواد، اخفِ الـ scroller
+                codeScroller.style.opacity = '0'; // ابدأ بتلاشي الشفافية
 
-                // بعد تأخير بسيط لإظهار الانتقال للشاشة السوداء، أظهر العناصر الأخرى
+                // بعد انتهاء التلاشي (مدة الـ transition)، اخفِ العنصر بالكامل وأظهر باقي العناصر
                 setTimeout(() => {
-                    topSuccessMessage.classList.add('show');
-                    centerRoro.classList.add('show');
-                    bottomSuccessMessage.classList.add('show');
-                }, 1500); // تأخير بعد اختفاء الأكواد
+                    codeScroller.style.display = 'none'; // إخفاء الصندوق بالكامل
+
+                    // أظهر الرسائل و RORO
+                    topSuccessMessage.style.display = 'block';
+                    centerRoro.style.display = 'block';
+                    bottomSuccessMessage.style.display = 'block';
+
+                    // ثم أضف فئة 'show' لجعلها تظهر بتأثير التلاشي
+                    setTimeout(() => {
+                        topSuccessMessage.classList.add('show');
+                        centerRoro.classList.add('show');
+                        bottomSuccessMessage.classList.add('show');
+                    }, 50); // تأخير بسيط جداً لضمان تطبيق 'display: block' أولاً
+                }, 1000); // هذا التأخير يجب أن يتطابق مع مدة انتقال الشفافية (transition) في CSS
             });
         });
     </script>
